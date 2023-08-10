@@ -1,4 +1,4 @@
-package com.example.wantedpreonboardingbackend.mebmer.application.port;
+package com.example.wantedpreonboardingbackend.mebmer.application;
 
 import com.example.wantedpreonboardingbackend.mebmer.domain.Member;
 

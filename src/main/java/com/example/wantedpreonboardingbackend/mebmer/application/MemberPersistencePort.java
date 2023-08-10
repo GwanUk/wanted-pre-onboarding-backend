@@ -1,0 +1,7 @@
+package com.example.wantedpreonboardingbackend.mebmer.application;
+
+import com.example.wantedpreonboardingbackend.mebmer.domain.Member;
+
+public interface MemberPersistencePort {
+    void save(Member member);
+}

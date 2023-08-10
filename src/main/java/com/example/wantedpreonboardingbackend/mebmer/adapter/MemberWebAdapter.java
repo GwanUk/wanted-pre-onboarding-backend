@@ -1,8 +1,9 @@
 package com.example.wantedpreonboardingbackend.mebmer.adapter;
 
-import com.example.wantedpreonboardingbackend.mebmer.application.port.MemberWebPort;
+import com.example.wantedpreonboardingbackend.mebmer.application.MemberWebPort;
 import com.example.wantedpreonboardingbackend.mebmer.domain.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
