@@ -19,7 +19,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원 가입")
-    void save_password_encoding() {
+    void save() {
         // given
         Member member = new Member("user@naver.com", "user1234");
 
