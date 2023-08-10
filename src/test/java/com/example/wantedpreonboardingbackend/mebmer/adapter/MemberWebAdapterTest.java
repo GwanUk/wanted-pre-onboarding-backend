@@ -36,7 +36,7 @@ class MemberWebAdapterTest {
         String json = objectMapper.writeValueAsString(member);
 
         // when
-        mockMvc.perform(post("/members")
+        mockMvc.perform(post("/member")
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -54,7 +54,7 @@ class MemberWebAdapterTest {
         String json = objectMapper.writeValueAsString(member);
 
         // expected
-        mockMvc.perform(post("/members")
+        mockMvc.perform(post("/member")
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
@@ -69,7 +69,7 @@ class MemberWebAdapterTest {
         String json = objectMapper.writeValueAsString(member);
 
         // expected
-        mockMvc.perform(post("/members")
+        mockMvc.perform(post("/member")
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())

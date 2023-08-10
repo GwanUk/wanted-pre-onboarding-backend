@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ class MemberPersistenceAdapterTest {
     private MemberPersistenceAdapter memberPersistenceAdapter;
 
     @Test
+    @Sql("/sql/member/member-data.sql")
     @DisplayName("회원 가입")
     void save() {
         // given
