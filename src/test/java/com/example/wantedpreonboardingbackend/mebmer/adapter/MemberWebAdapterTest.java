@@ -17,8 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = MemberWebAdapter.class,
-        excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@WebMvcTest(controllers = MemberWebAdapter.class)
 class MemberWebAdapterTest {
 
     @Autowired

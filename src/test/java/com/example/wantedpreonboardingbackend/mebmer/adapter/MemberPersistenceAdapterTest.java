@@ -1,6 +1,5 @@
 package com.example.wantedpreonboardingbackend.mebmer.adapter;
 
-import com.example.wantedpreonboardingbackend.common.PasswordEncoderFactoryBean;
 import com.example.wantedpreonboardingbackend.mebmer.domain.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,8 +13,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import(value = {MemberPersistenceAdapter.class,
-        PasswordEncoderFactoryBean.class})
+@Import(MemberPersistenceAdapter.class)
 class MemberPersistenceAdapterTest {
 
     @Autowired

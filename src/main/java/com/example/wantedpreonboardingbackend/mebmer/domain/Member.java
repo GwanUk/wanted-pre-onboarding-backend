@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -32,9 +31,9 @@ public class Member {
         this.password = password;
     }
 
-    public void passwordEncoding(PasswordEncoder passwordEncoder) {
-        password = passwordEncoder.encode(password);
-    }
+//    public void passwordEncoding(PasswordEncoder passwordEncoder) {
+//        password = passwordEncoder.encode(password);
+//    }
 
     @Override
     public boolean equals(Object o) {

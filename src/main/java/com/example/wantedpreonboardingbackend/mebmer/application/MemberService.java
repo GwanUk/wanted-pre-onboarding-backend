@@ -16,4 +16,9 @@ class MemberService implements MemberWebPort{
     public void save(Member member) {
         memberPersistencePort.save(member);
     }
+
+    @Override
+    public Long login(Member member) {
+        return 1L;
+    }
 }
