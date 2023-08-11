@@ -2,7 +2,7 @@ package com.example.wantedpreonboardingbackend.common.arguemntresolver;
 
 import com.example.wantedpreonboardingbackend.common.annotation.Auth;
 import com.example.wantedpreonboardingbackend.common.exception.UnauthorizedException;
-import com.example.wantedpreonboardingbackend.common.utils.KeyHolder;
+import com.example.wantedpreonboardingbackend.common.utils.JwtContext;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -28,18 +28,7 @@ public class AuthenticationArgumentResolver implements HandlerMethodArgumentReso
             throw new UnauthorizedException();
         }
 
-        try {
-            Jws<Claims> claims = Jwts.parserBuilder()
-                    .setSigningKey(KeyHolder.KEY)
-                    .build()
-                    .parseClaimsJws(jws);
-
-            String sub = claims.getBody().getSubject();
-
-            return Long.valueOf(sub);
-
-        } catch (JwtException e) {
-            throw new UnauthorizedException(e);
-        }
+        String sub = JwtContext.getSubject(jws);
+        return Long.valueOf(sub);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,7 +21,7 @@ class MemberPersistenceAdapterTest {
     private MemberPersistenceAdapter memberPersistenceAdapter;
 
     @Test
-    @Sql("/sql/member/member-data.sql")
+    @Sql("/sql/member/member-table.sql")
     @DisplayName("회원 가입")
     void save() {
         // given
@@ -32,5 +33,18 @@ class MemberPersistenceAdapterTest {
         // then
         List<Member> members = memberPersistenceAdapter.findAll();
         assertThat(members.get(0)).isEqualTo(member);
+    }
+
+    @Test
+    @Sql("/sql/member/member-data.sql")
+    @DisplayName("회원 조회 by email")
+    void findByEmail() {
+        // when
+        Member member = memberPersistenceAdapter.findByEmail("user1234@naver.com")
+                .orElseThrow(NoSuchElementException::new);
+
+        // then
+        assertThat(member.getEmail()).isEqualTo("user1234@naver.com");
+        assertThat(member.getPassword()).isEqualTo("user1234");
     }
 }
