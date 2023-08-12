@@ -1,5 +1,6 @@
 package com.example.wantedpreonboardingbackend.mebmer.domain;
 
+import com.example.wantedpreonboardingbackend.common.utils.PasswordEncoderUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,6 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -31,20 +31,11 @@ public class Member {
         this.password = password;
     }
 
-//    public void passwordEncoding(PasswordEncoder passwordEncoder) {
-//        password = passwordEncoder.encode(password);
-//    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Member member = (Member) o;
-        return Objects.equals(email, member.email) && Objects.equals(password, member.password);
+    public void passwordEncoding() {
+        password = PasswordEncoderUtil.encode(password);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(email, password);
+    public boolean matchPassword(Member member) {
+        return PasswordEncoderUtil.matches(member.getPassword(), password);
     }
 }

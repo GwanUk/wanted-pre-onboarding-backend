@@ -27,6 +27,7 @@ class MemberWebAdapter {
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody Member member) {
         Long id = memberWebPort.login(member);
-        return Map.of("Authentication", JwtContext.createJwt(id));
+        String jwt = JwtContext.createJwt(id);
+        return Map.of("Authentication", jwt);
     }
 }

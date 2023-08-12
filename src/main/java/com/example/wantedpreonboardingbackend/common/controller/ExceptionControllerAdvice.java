@@ -1,5 +1,6 @@
 package com.example.wantedpreonboardingbackend.common.controller;
 
+import com.example.wantedpreonboardingbackend.common.exception.NotFoundDataException;
 import com.example.wantedpreonboardingbackend.common.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,5 +14,11 @@ public class ExceptionControllerAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public String unauthorizedException(UnauthorizedException exception) {
         return "권한이 없습니다.";
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String unauthorizedException(NotFoundDataException exception) {
+        return "데이터가 없습니다.";
     }
 }

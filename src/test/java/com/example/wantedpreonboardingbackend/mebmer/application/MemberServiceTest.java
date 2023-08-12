@@ -1,21 +1,20 @@
 package com.example.wantedpreonboardingbackend.mebmer.application;
 
+import com.example.wantedpreonboardingbackend.common.utils.PasswordEncoderUtil;
 import com.example.wantedpreonboardingbackend.mebmer.domain.Member;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
@@ -26,7 +25,7 @@ class MemberServiceTest {
     private MemberPersistencePort memberPersistencePort;
 
     @Test
-    @DisplayName("회원 가입")
+    @DisplayName("회원 가입 패스워드 암호화")
     void save() {
         // given
         Member member = new Member("user@naver.com", "user1234");
@@ -35,7 +34,10 @@ class MemberServiceTest {
         memberService.save(member);
 
         // then
-        then(memberPersistencePort).should().save(member);
+        ArgumentCaptor<Member> ac = ArgumentCaptor.forClass(Member.class);
+        then(memberPersistencePort).should().save(ac.capture());
+        assertThat(ac.getValue().getEmail()).isEqualTo("user@naver.com");
+        assertThat(PasswordEncoderUtil.matches("user1234", ac.getValue().getPassword())).isTrue();
     }
 
     @Test
@@ -43,7 +45,8 @@ class MemberServiceTest {
     void login() {
         // given
         Member member = new Member("user@naver.com", "user1234");
-        given(memberPersistencePort.findByEmail("user@naver.com")).willReturn(Optional.of(member));
+        Member findMember = new Member("user@naver.com", PasswordEncoderUtil.encode("user1234"));
+        given(memberPersistencePort.findByEmail("user@naver.com")).willReturn(Optional.of(findMember));
 
         // when
         Long memberId = memberService.login(member);

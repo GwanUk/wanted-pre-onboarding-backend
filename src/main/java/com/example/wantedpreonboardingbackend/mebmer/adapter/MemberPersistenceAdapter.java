@@ -13,15 +13,9 @@ import java.util.Optional;
 class MemberPersistenceAdapter implements MemberPersistencePort {
 
     private final MemberRepository memberRepository;
-//    private final PasswordEncoder passwordEncoder;
 
     public List<Member> findAll() {
         return memberRepository.findAll();
-    }
-
-    @Override
-    public Optional<Member> findById(Long id) {
-        return memberRepository.findById(id);
     }
 
     @Override
@@ -31,7 +25,6 @@ class MemberPersistenceAdapter implements MemberPersistencePort {
 
     @Override
     public void save(Member member) {
-//        member.passwordEncoding(passwordEncoder);
         memberRepository.save(member);
     }
 }

@@ -6,9 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -18,6 +15,7 @@ class MemberService implements MemberWebPort{
 
     @Override
     public void save(Member member) {
+        member.passwordEncoding();
         memberPersistencePort.save(member);
     }
 
@@ -26,7 +24,7 @@ class MemberService implements MemberWebPort{
         Member findMember = memberPersistencePort.findByEmail(member.getEmail())
                 .orElseThrow(NotFoundDataException::new);
 
-        if (!member.equals(findMember)) {
+        if (!findMember.matchPassword(member)) {
             throw new NotFoundDataException();
         }
 

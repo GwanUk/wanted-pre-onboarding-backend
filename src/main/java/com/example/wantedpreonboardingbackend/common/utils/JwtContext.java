@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
 import java.util.Base64;
+import java.util.Date;
 
 public abstract class JwtContext {
 
@@ -25,14 +26,15 @@ public abstract class JwtContext {
         return Jwts.builder()
                 .setSubject(String.valueOf(id))
                 .signWith(secretKey)
+                .setIssuedAt(new Date())
                 .compact();
     }
 
-    public static String getSubject(String jws) {
+    public static String getSubject(String jwt) {
         Jws<Claims> claims = Jwts.parserBuilder()
                 .setSigningKey(KEY)
                 .build()
-                .parseClaimsJws(jws);
+                .parseClaimsJws(jwt);
 
         return claims.getBody().getSubject();
     }

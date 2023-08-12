@@ -3,13 +3,16 @@ package com.example.wantedpreonboardingbackend.mebmer.adapter;
 import com.example.wantedpreonboardingbackend.mebmer.application.MemberWebPort;
 import com.example.wantedpreonboardingbackend.mebmer.domain.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,7 +45,10 @@ class MemberWebAdapterTest {
                 .andDo(print());
 
         // then
-        then(memberWebPort).should().save(member);
+        ArgumentCaptor<Member> ac = ArgumentCaptor.forClass(Member.class);
+        then(memberWebPort).should().save(ac.capture());
+        assertThat(ac.getValue().getEmail()).isEqualTo("user@naver");
+        assertThat(ac.getValue().getPassword()).isEqualTo("12345678");
     }
 
     @Test
@@ -92,6 +98,9 @@ class MemberWebAdapterTest {
                 .andDo(print());
 
         // then
-        then(memberWebPort).should().login(member);
+        ArgumentCaptor<Member> ac = ArgumentCaptor.forClass(Member.class);
+        then(memberWebPort).should().login(ac.capture());
+        assertThat(ac.getValue().getEmail()).isEqualTo("user@naver.com");
+        assertThat(ac.getValue().getPassword()).isEqualTo("user1234");
     }
 }
