@@ -22,6 +22,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = TwitWebAdapter.class)
@@ -46,6 +47,19 @@ class TwitWebAdapterTest {
         // then
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"));
         then(twitWebPort).should().findAllWithMember(pageRequest);
+    }
+
+    @Test
+    @DisplayName("게시글 조회 by id")
+    void find_by_id() throws Exception {
+        // when
+        mockMvc.perform(get("/twit/{twitId}", "1")
+                        .accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        // then
+        then(twitWebPort).should().findById(ArgumentMatchers.eq(1L));
     }
 
     @Test

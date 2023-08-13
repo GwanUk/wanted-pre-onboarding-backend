@@ -1,5 +1,6 @@
 package com.example.wantedpreonboardingbackend.twit.adapter;
 
+import com.example.wantedpreonboardingbackend.common.exception.NotFoundDataException;
 import com.example.wantedpreonboardingbackend.mebmer.adapter.MemberRepository;
 import com.example.wantedpreonboardingbackend.mebmer.domain.Member;
 import com.example.wantedpreonboardingbackend.twit.domain.Twit;
@@ -53,6 +54,21 @@ class TwitPersistenceAdapterTest {
         assertThat(twits2.get(1).getContent()).isEqualTo("user3 writing test e");
         assertThat(twits2.get(2).getId()).isEqualTo(6);
         assertThat(twits2.get(2).getContent()).isEqualTo("user3 writing test f");
+    }
+
+    @Test
+    @Sql("/sql/twit/twit-data.sql")
+    @DisplayName("게시물 단건 조회")
+    void find_member_by_id() {
+        // when
+        Twit twit = twitPersistenceAdapter.findById(1L).orElseThrow(NotFoundDataException::new);
+
+        // then
+        assertThat(twit.getId()).isEqualTo(1L);
+        assertThat(twit.getContent()).isEqualTo("user1 writing test a");
+        assertThat(twit.getMember().getId()).isEqualTo(1L);
+        assertThat(twit.getMember().getEmail()).isEqualTo("user1@naver.com");
+        assertThat(twit.getMember().getPassword()).isEqualTo("user1234");
     }
 
     @Test

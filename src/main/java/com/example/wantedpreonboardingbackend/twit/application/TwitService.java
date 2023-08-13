@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -22,6 +23,11 @@ class TwitService implements TwitWebPort{
     @Override
     public List<Twit> findAllWithMember(Pageable pageable) {
         return twitPersistencePort.findAllWithMember(pageable);
+    }
+
+    @Override
+    public Optional<Twit> findById(Long twitId) {
+        return twitPersistencePort.findById(twitId);
     }
 
     @Override

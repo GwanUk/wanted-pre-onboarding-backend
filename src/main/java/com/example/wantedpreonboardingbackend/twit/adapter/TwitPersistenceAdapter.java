@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -17,6 +18,11 @@ class TwitPersistenceAdapter implements TwitPersistencePort {
     @Override
     public List<Twit> findAllWithMember(Pageable pageable) {
         return twitRepository.findAllWithMember(pageable);
+    }
+
+    @Override
+    public Optional<Twit> findById(Long twitId) {
+        return twitRepository.findById(twitId);
     }
 
     @Override

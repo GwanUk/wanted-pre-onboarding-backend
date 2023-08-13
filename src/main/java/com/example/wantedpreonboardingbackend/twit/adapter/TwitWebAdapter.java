@@ -9,6 +9,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/twit")
@@ -20,6 +21,11 @@ class TwitWebAdapter {
     @GetMapping
     List<Twit> findAll(@PageableDefault(sort = "id") Pageable pageable) {
         return twitWebPort.findAllWithMember(pageable);
+    }
+
+    @GetMapping("/{twitId}")
+    Optional<Twit> findById(@PathVariable Long twitId) {
+        return twitWebPort.findById(twitId);
     }
 
     @PostMapping
