@@ -15,4 +15,6 @@ public interface TwitPersistencePort {
     void save(Twit twit);
 
     Optional<Twit> findById(Long twitId);
+
+    void delete(Twit twit);
 }

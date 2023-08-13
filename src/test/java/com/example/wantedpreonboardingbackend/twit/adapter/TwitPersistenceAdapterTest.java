@@ -92,4 +92,21 @@ class TwitPersistenceAdapterTest {
         assertThat(twits.get(0).getMember().getEmail()).isEqualTo("user@naver.com");
         assertThat(twits.get(0).getMember().getPassword()).isEqualTo("user1234");
     }
+
+    @Test
+    @Sql("/sql/twit/twit-data.sql")
+    @DisplayName("게시물 삭제")
+    void delete() {
+        // when
+        Twit twit = twitPersistenceAdapter.findById(1L).orElseThrow(NotFoundDataException::new);
+        twitPersistenceAdapter.delete(twit);
+
+        // then
+        List<Long> ids = twitPersistenceAdapter
+                .findAllWithMember(PageRequest.of(0, 10))
+                .stream()
+                .map(Twit::getId)
+                .toList();
+        assertThat(ids).doesNotContain(1L);
+    }
 }

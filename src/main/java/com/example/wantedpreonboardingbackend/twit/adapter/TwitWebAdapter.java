@@ -37,4 +37,9 @@ class TwitWebAdapter {
     void update(@Auth Long memberId, @PathVariable Long twitId, @RequestBody Twit twit) {
         twitWebPort.update(memberId, twitId, twit);
     }
+
+    @DeleteMapping("/{twitId}")
+    void delete(@Auth Long memberId, @PathVariable Long twitId) {
+        twitWebPort.delete(memberId, twitId);
+    }
 }

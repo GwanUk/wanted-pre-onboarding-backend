@@ -14,4 +14,6 @@ public interface TwitWebPort {
     Optional<Twit> findById(Long twitId);
 
     void update(Long memberId, Long twitId, Twit twit);
+
+    void delete(Long memberId, Long twitId);
 }

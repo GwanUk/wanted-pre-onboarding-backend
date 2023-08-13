@@ -65,4 +65,23 @@ class TwitServiceTest {
         then(findTwit).should().isWriter(eq(memberId));
         then(findTwit).should().rewrite(eq("writing test"));
     }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void delete() {
+        // given
+        Long memberId = 1L;
+        Long twitId = 2L;
+        Twit twit = new Twit("writing test");
+        Twit findTwit = Mockito.mock(Twit.class);
+        given(twitPersistencePort.findByIdWithMember(eq(twitId)))
+                .willReturn(Optional.of(findTwit));
+
+        // when
+        twitService.delete(memberId, twitId);
+
+        // then
+        then(findTwit).should().isWriter(eq(memberId));
+        then(twitPersistencePort).should().delete(findTwit);
+    }
 }

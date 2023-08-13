@@ -51,4 +51,14 @@ class TwitService implements TwitWebPort{
 
         findTwit.rewrite(twit.getContent());
     }
+
+    @Override
+    public void delete(Long memberId, Long twitId) {
+        Twit findTwit = twitPersistencePort.findByIdWithMember(twitId)
+                .orElseThrow(NotFoundDataException::new);
+
+        findTwit.isWriter(memberId);
+
+        twitPersistencePort.delete(findTwit);
+    }
 }

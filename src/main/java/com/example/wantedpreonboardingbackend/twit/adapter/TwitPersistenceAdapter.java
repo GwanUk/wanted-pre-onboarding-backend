@@ -34,4 +34,9 @@ class TwitPersistenceAdapter implements TwitPersistencePort {
     public void save(Twit twit) {
         twitRepository.save(twit);
     }
+
+    @Override
+    public void delete(Twit twit) {
+        twitRepository.delete(twit);
+    }
 }

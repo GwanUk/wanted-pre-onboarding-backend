@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
@@ -22,6 +24,7 @@ import static org.mockito.BDDMockito.then;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -102,5 +105,49 @@ class TwitWebAdapterTest {
         ArgumentCaptor<Twit> ac = ArgumentCaptor.forClass(Twit.class);
         then(twitWebPort).should().update(eq(1L), eq(1L), ac.capture());
         assertThat(ac.getValue().getContent()).isEqualTo("test writing");
+    }
+
+    @Test
+    @DisplayName("게시글 수정 jwt 토큰 헤더 없으면 예외")
+    void update_non_jwt() throws Exception {
+        // given
+        Twit twit = new Twit("test writing");
+        String json = objectMapper.writeValueAsString(twit);
+
+        // expected
+        mockMvc.perform(put("/twit/{twitId}", "1")
+                        .content(json))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string("권한이 없습니다."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void delete_twit() throws Exception {
+        // when
+        mockMvc.perform(delete("/twit/{twitId}", "1")
+                        .header("Authentication", JwtContext.createJwt(1L)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        // then
+        ArgumentCaptor<Twit> ac = ArgumentCaptor.forClass(Twit.class);
+        then(twitWebPort).should().delete(eq(1L), eq(1L));
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 jwt 토큰 헤더 없으면 예외")
+    void delete_non_jwt() throws Exception {
+        // given
+        Twit twit = new Twit("test writing");
+        String json = objectMapper.writeValueAsString(twit);
+
+        // expected
+        mockMvc.perform(delete("/twit/{twitId}", "1")
+                        .content(json))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string("권한이 없습니다."))
+                .andDo(print());
     }
 }
