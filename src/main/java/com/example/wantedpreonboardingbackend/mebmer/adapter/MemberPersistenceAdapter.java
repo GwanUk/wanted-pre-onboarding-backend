@@ -24,6 +24,11 @@ class MemberPersistenceAdapter implements MemberPersistencePort {
     }
 
     @Override
+    public Optional<Member> findById(Long memberId) {
+        return memberRepository.findById(memberId);
+    }
+
+    @Override
     public void save(Member member) {
         memberRepository.save(member);
     }

@@ -1,0 +1,153 @@
+package com.example.wantedpreonboardingbackend.twit.adapter;
+
+import com.example.wantedpreonboardingbackend.common.utils.JwtContext;
+import com.example.wantedpreonboardingbackend.twit.application.TwitWebPort;
+import com.example.wantedpreonboardingbackend.twit.domain.Twit;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.then;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(controllers = TwitWebAdapter.class)
+class TwitWebAdapterTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @MockBean
+    private TwitWebPort twitWebPort;
+
+    @Test
+    @DisplayName("게시글 전체 조회")
+    void findAllWithMember() throws Exception {
+        // when
+        mockMvc.perform(get("/twit")
+                        .accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        // then
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"));
+        then(twitWebPort).should().findAllWithMember(pageRequest);
+    }
+
+    @Test
+    @DisplayName("게시글 조회 by id")
+    void find_by_id() throws Exception {
+        // when
+        mockMvc.perform(get("/twit/{twitId}", "1")
+                        .accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        // then
+        then(twitWebPort).should().findById(eq(1L));
+    }
+
+    @Test
+    @DisplayName("게시글 생성")
+    void save() throws Exception {
+        // given
+        Twit twit = new Twit("test writing");
+        String json = objectMapper.writeValueAsString(twit);
+
+        // when
+        mockMvc.perform(post("/twit")
+                        .header("Authentication", JwtContext.createJwt(1L))
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        // then
+        ArgumentCaptor<Twit> ac = ArgumentCaptor.forClass(Twit.class);
+        then(twitWebPort).should().save(eq(1L), ac.capture());
+        assertThat(ac.getValue().getContent()).isEqualTo("test writing");
+    }
+
+    @Test
+    @DisplayName("게시글 수정")
+    void update() throws Exception {
+        // given
+        Twit twit = new Twit("test writing");
+        String json = objectMapper.writeValueAsString(twit);
+
+        // when
+        mockMvc.perform(put("/twit/{twitId}", "1")
+                        .header("Authentication", JwtContext.createJwt(1L))
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        // then
+        ArgumentCaptor<Twit> ac = ArgumentCaptor.forClass(Twit.class);
+        then(twitWebPort).should().update(eq(1L), eq(1L), ac.capture());
+        assertThat(ac.getValue().getContent()).isEqualTo("test writing");
+    }
+
+    @Test
+    @DisplayName("게시글 수정 jwt 토큰 헤더 없으면 예외")
+    void update_non_jwt() throws Exception {
+        // given
+        Twit twit = new Twit("test writing");
+        String json = objectMapper.writeValueAsString(twit);
+
+        // expected
+        mockMvc.perform(put("/twit/{twitId}", "1")
+                        .content(json))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string("권한이 없습니다."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void delete_twit() throws Exception {
+        // when
+        mockMvc.perform(delete("/twit/{twitId}", "1")
+                        .header("Authentication", JwtContext.createJwt(1L)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        // then
+        ArgumentCaptor<Twit> ac = ArgumentCaptor.forClass(Twit.class);
+        then(twitWebPort).should().delete(eq(1L), eq(1L));
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 jwt 토큰 헤더 없으면 예외")
+    void delete_non_jwt() throws Exception {
+        // given
+        Twit twit = new Twit("test writing");
+        String json = objectMapper.writeValueAsString(twit);
+
+        // expected
+        mockMvc.perform(delete("/twit/{twitId}", "1")
+                        .content(json))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string("권한이 없습니다."))
+                .andDo(print());
+    }
+}
