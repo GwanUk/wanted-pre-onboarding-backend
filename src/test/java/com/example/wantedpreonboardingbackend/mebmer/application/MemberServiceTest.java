@@ -21,6 +21,7 @@ class MemberServiceTest {
 
     @InjectMocks
     private MemberService memberService;
+
     @Mock
     private MemberPersistencePort memberPersistencePort;
 

@@ -40,11 +40,11 @@ class MemberPersistenceAdapterTest {
     @DisplayName("회원 조회 by email")
     void findByEmail() {
         // when
-        Member member = memberPersistenceAdapter.findByEmail("user1234@naver.com")
+        Member member = memberPersistenceAdapter.findByEmail("user@naver.com")
                 .orElseThrow(NoSuchElementException::new);
 
         // then
-        assertThat(member.getEmail()).isEqualTo("user1234@naver.com");
+        assertThat(member.getEmail()).isEqualTo("user@naver.com");
         assertThat(member.getPassword()).isEqualTo("user1234");
     }
 }

@@ -28,4 +28,8 @@ public class Twit {
     public Twit(String content) {
         this.content = content;
     }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
 }
