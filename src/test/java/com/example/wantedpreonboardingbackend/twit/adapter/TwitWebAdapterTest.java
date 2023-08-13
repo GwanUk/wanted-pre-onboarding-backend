@@ -11,11 +11,15 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,7 +33,21 @@ class TwitWebAdapterTest {
     private ObjectMapper objectMapper;
     @MockBean
     private TwitWebPort twitWebPort;
-    
+
+    @Test
+    @DisplayName("게시글 전체 조회")
+    void findAllWithMember() throws Exception {
+        // when
+        mockMvc.perform(get("/twit")
+                        .accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        // then
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"));
+        then(twitWebPort).should().findAllWithMember(pageRequest);
+    }
+
     @Test
     @DisplayName("게시글 생성")
     void save() throws Exception {

@@ -4,10 +4,11 @@ import com.example.wantedpreonboardingbackend.common.annotation.Auth;
 import com.example.wantedpreonboardingbackend.twit.application.TwitWebPort;
 import com.example.wantedpreonboardingbackend.twit.domain.Twit;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/twit")
@@ -15,6 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 class TwitWebAdapter {
 
     private final TwitWebPort twitWebPort;
+
+    @GetMapping
+    List<Twit> findAll(@PageableDefault(sort = "id") Pageable pageable) {
+        return twitWebPort.findAllWithMember(pageable);
+    }
 
     @PostMapping
     void save(@Auth Long memberId, @RequestBody Twit twit) {
