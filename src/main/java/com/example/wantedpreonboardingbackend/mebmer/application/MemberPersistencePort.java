@@ -10,7 +10,7 @@ public interface MemberPersistencePort {
 
     Optional<Member> findByEmail(String email);
 
-    Optional<Member> findById(Long id);
+    Optional<Member> findById(Long memberId);
 
     void save(Member member);
 }

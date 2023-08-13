@@ -17,10 +17,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -59,7 +59,7 @@ class TwitWebAdapterTest {
                 .andDo(print());
 
         // then
-        then(twitWebPort).should().findById(ArgumentMatchers.eq(1L));
+        then(twitWebPort).should().findById(eq(1L));
     }
 
     @Test
@@ -79,8 +79,28 @@ class TwitWebAdapterTest {
 
         // then
         ArgumentCaptor<Twit> ac = ArgumentCaptor.forClass(Twit.class);
-        then(twitWebPort).should().save(ArgumentMatchers.eq(1L), ac.capture());
+        then(twitWebPort).should().save(eq(1L), ac.capture());
         assertThat(ac.getValue().getContent()).isEqualTo("test writing");
     }
 
+    @Test
+    @DisplayName("게시글 수정")
+    void update() throws Exception {
+        // given
+        Twit twit = new Twit("test writing");
+        String json = objectMapper.writeValueAsString(twit);
+
+        // when
+        mockMvc.perform(put("/twit/{twitId}", "1")
+                        .header("Authentication", JwtContext.createJwt(1L))
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        // then
+        ArgumentCaptor<Twit> ac = ArgumentCaptor.forClass(Twit.class);
+        then(twitWebPort).should().update(eq(1L), eq(1L), ac.capture());
+        assertThat(ac.getValue().getContent()).isEqualTo("test writing");
+    }
 }

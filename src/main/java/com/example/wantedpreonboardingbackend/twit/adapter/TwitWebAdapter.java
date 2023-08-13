@@ -32,4 +32,9 @@ class TwitWebAdapter {
     void save(@Auth Long memberId, @RequestBody Twit twit) {
         twitWebPort.save(memberId, twit);
     }
+
+    @PutMapping("/{twitId}")
+    void update(@Auth Long memberId, @PathVariable Long twitId, @RequestBody Twit twit) {
+        twitWebPort.update(memberId, twitId, twit);
+    }
 }

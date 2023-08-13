@@ -10,6 +10,8 @@ public interface TwitPersistencePort {
 
     List<Twit> findAllWithMember(Pageable pageable);
 
+    Optional<Twit> findByIdWithMember(Long twitId);
+
     void save(Twit twit);
 
     Optional<Twit> findById(Long twitId);

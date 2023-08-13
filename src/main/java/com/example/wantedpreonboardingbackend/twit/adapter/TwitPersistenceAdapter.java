@@ -26,6 +26,11 @@ class TwitPersistenceAdapter implements TwitPersistencePort {
     }
 
     @Override
+    public Optional<Twit> findByIdWithMember(Long twitId) {
+        return twitRepository.findByIdWithMember(twitId);
+    }
+
+    @Override
     public void save(Twit twit) {
         twitRepository.save(twit);
     }

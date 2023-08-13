@@ -12,4 +12,6 @@ public interface TwitWebPort {
     List<Twit> findAllWithMember(Pageable pageable);
 
     Optional<Twit> findById(Long twitId);
+
+    void update(Long memberId, Long twitId, Twit twit);
 }

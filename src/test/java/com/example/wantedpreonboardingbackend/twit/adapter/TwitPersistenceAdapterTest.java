@@ -32,28 +32,28 @@ class TwitPersistenceAdapterTest {
     @DisplayName("게시물 전체 조회")
     void find_all_with_member() {
         // when
-        PageRequest pageRequest1 = PageRequest.of(0, 3, Sort.by(Sort.Direction.ASC, "id"));
+        PageRequest pageRequest1 = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "id"));
         List<Twit> twits1 = twitPersistenceAdapter.findAllWithMember(pageRequest1);
 
-        PageRequest pageRequest2 = PageRequest.of(1, 3, Sort.by(Sort.Direction.ASC, "id"));
+        PageRequest pageRequest2 = PageRequest.of(1, 3, Sort.by(Sort.Direction.DESC, "id"));
         List<Twit> twits2 = twitPersistenceAdapter.findAllWithMember(pageRequest2);
 
         // then
         assertThat(twits1).hasSize(3);
-        assertThat(twits1.get(0).getId()).isEqualTo(1);
-        assertThat(twits1.get(0).getContent()).isEqualTo("user1 writing test a");
-        assertThat(twits1.get(1).getId()).isEqualTo(2);
-        assertThat(twits1.get(1).getContent()).isEqualTo("user1 writing test b");
-        assertThat(twits1.get(2).getId()).isEqualTo(3);
-        assertThat(twits1.get(2).getContent()).isEqualTo("user2 writing test c");
+        assertThat(twits1.get(0).getId()).isEqualTo(6);
+        assertThat(twits1.get(0).getContent()).isEqualTo("user3 writing test f");
+        assertThat(twits1.get(1).getId()).isEqualTo(5);
+        assertThat(twits1.get(1).getContent()).isEqualTo("user3 writing test e");
+        assertThat(twits1.get(2).getId()).isEqualTo(4);
+        assertThat(twits1.get(2).getContent()).isEqualTo("user2 writing test d");
 
         assertThat(twits2).hasSize(3);
-        assertThat(twits2.get(0).getId()).isEqualTo(4);
-        assertThat(twits2.get(0).getContent()).isEqualTo("user2 writing test d");
-        assertThat(twits2.get(1).getId()).isEqualTo(5);
-        assertThat(twits2.get(1).getContent()).isEqualTo("user3 writing test e");
-        assertThat(twits2.get(2).getId()).isEqualTo(6);
-        assertThat(twits2.get(2).getContent()).isEqualTo("user3 writing test f");
+        assertThat(twits2.get(0).getId()).isEqualTo(3);
+        assertThat(twits2.get(0).getContent()).isEqualTo("user2 writing test c");
+        assertThat(twits2.get(1).getId()).isEqualTo(2);
+        assertThat(twits2.get(1).getContent()).isEqualTo("user1 writing test b");
+        assertThat(twits2.get(2).getId()).isEqualTo(1);
+        assertThat(twits2.get(2).getContent()).isEqualTo("user1 writing test a");
     }
 
     @Test
