@@ -24,4 +24,8 @@ public class Twit {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
+    public Twit(String content) {
+        this.content = content;
+    }
 }
