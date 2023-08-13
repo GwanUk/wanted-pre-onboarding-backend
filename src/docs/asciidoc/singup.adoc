@@ -1,0 +1,6 @@
+include::{snippets}/signup/http-request.adoc[]
+include::{snippets}/signup/http-response.adoc[]
+
+include::{snippets}/login/http-request.adoc[]
+include::{snippets}/login/http-response.adoc[]
+

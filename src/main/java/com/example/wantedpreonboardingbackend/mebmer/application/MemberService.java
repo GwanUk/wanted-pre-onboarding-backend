@@ -22,8 +22,8 @@ class MemberService implements MemberWebPort{
 
     @Override
     public void save(Member member) {
-        member.passwordEncoding();
-        memberPersistencePort.save(member);
+        Member encodedMember = member.passwordEncoding();
+        memberPersistencePort.save(encodedMember);
     }
 
     @Override
@@ -32,9 +32,7 @@ class MemberService implements MemberWebPort{
         Member findMember = memberPersistencePort.findByEmail(member.getEmail())
                 .orElseThrow(NotFoundDataException::new);
 
-        if (!findMember.matchPassword(member)) {
-            throw new NotFoundDataException();
-        }
+        findMember.matchPassword(member);
 
         return findMember.getId();
     }

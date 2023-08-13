@@ -21,7 +21,7 @@ class MemberPersistenceAdapterTest {
     private MemberPersistenceAdapter memberPersistenceAdapter;
 
     @Test
-    @Sql("/sql/member/member-table.sql")
+    @Sql("/sql/test-init-data.sql")
     @DisplayName("회원 가입")
     void save() {
         // given
@@ -32,19 +32,19 @@ class MemberPersistenceAdapterTest {
 
         // then
         List<Member> members = memberPersistenceAdapter.findAll();
-        assertThat(members.get(0)).isEqualTo(member);
+        assertThat(members).contains(member);
     }
 
     @Test
-    @Sql("/sql/member/member-data.sql")
+    @Sql("/sql/test-init-data.sql")
     @DisplayName("회원 조회 by email")
     void findByEmail() {
         // when
-        Member member = memberPersistenceAdapter.findByEmail("user@naver.com")
+        Member member = memberPersistenceAdapter.findByEmail("user1@naver.com")
                 .orElseThrow(NoSuchElementException::new);
 
         // then
-        assertThat(member.getEmail()).isEqualTo("user@naver.com");
+        assertThat(member.getEmail()).isEqualTo("user1@naver.com");
         assertThat(member.getPassword()).isEqualTo("user1234");
     }
 }

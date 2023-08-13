@@ -28,7 +28,7 @@ class TwitPersistenceAdapterTest {
     private MemberRepository memberRepository;
 
     @Test
-    @Sql("/sql/twit/twit-data.sql")
+    @Sql("/sql/test-init-data.sql")
     @DisplayName("게시물 전체 조회")
     void find_all_with_member() {
         // when
@@ -57,7 +57,7 @@ class TwitPersistenceAdapterTest {
     }
 
     @Test
-    @Sql("/sql/twit/twit-data.sql")
+    @Sql("/sql/test-init-data.sql")
     @DisplayName("게시물 단건 조회")
     void find_member_by_id() {
         // when
@@ -72,7 +72,7 @@ class TwitPersistenceAdapterTest {
     }
 
     @Test
-    @Sql("/sql/twit/twit-table.sql")
+    @Sql("/sql/test-init-data.sql")
     @DisplayName("게시물 등록")
     void save() {
         // given
@@ -85,16 +85,16 @@ class TwitPersistenceAdapterTest {
 
         // then
         List<Twit> twits = twitPersistenceAdapter.findAllWithMember(PageRequest.of(0, 10));
-        assertThat(twits).hasSize(1);
-        assertThat(twits.get(0).getId()).isEqualTo(1L);
-        assertThat(twits.get(0).getContent()).isEqualTo("writing test");
-        assertThat(twits.get(0).getMember().getId()).isEqualTo(1L);
-        assertThat(twits.get(0).getMember().getEmail()).isEqualTo("user@naver.com");
-        assertThat(twits.get(0).getMember().getPassword()).isEqualTo("user1234");
+        assertThat(twits).hasSize(7);
+        assertThat(twits.get(6).getId()).isEqualTo(7L);
+        assertThat(twits.get(6).getContent()).isEqualTo("writing test");
+        assertThat(twits.get(6).getMember().getId()).isEqualTo(1L);
+        assertThat(twits.get(6).getMember().getEmail()).isEqualTo("user1@naver.com");
+        assertThat(twits.get(6).getMember().getPassword()).isEqualTo("user1234");
     }
 
     @Test
-    @Sql("/sql/twit/twit-data.sql")
+    @Sql("/sql/test-init-data.sql")
     @DisplayName("게시물 삭제")
     void delete() {
         // when
