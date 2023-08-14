@@ -32,8 +32,8 @@ class MemberWebAdapterTest {
     @DisplayName("회원 가입")
     void save() throws Exception {
         // given
-        Member member = new Member("user@naver", "12345678");
-        String json = objectMapper.writeValueAsString(member);
+        MemberRequest memberRequest = new MemberRequest("user@naver", "12345678");
+        String json = objectMapper.writeValueAsString(memberRequest);
 
         // when
         mockMvc.perform(post("/member")
@@ -53,8 +53,8 @@ class MemberWebAdapterTest {
     @DisplayName("회원 가입 이메일 @ 벨리데이션 확인")
     void save_email_validation() throws Exception {
         // given
-        Member member = new Member("naver.com", "12345678");
-        String json = objectMapper.writeValueAsString(member);
+        MemberRequest memberRequest = new MemberRequest("naver.com", "12345678");
+        String json = objectMapper.writeValueAsString(memberRequest);
 
         // expected
         mockMvc.perform(post("/member")
@@ -69,8 +69,8 @@ class MemberWebAdapterTest {
     @DisplayName("회원 가입 비밀번호 8자 이상 벨리데이션 확인")
     void save_password_validation() throws Exception {
         // given
-        Member member = new Member("user@naver", "1234567");
-        String json = objectMapper.writeValueAsString(member);
+        MemberRequest memberRequest = new MemberRequest("user@naver", "1234567");
+        String json = objectMapper.writeValueAsString(memberRequest);
 
         // expected
         mockMvc.perform(post("/member")
@@ -85,8 +85,8 @@ class MemberWebAdapterTest {
     @DisplayName("로그인")
     void login() throws Exception {
         // given
-        Member member = new Member("user@naver.com", "user1234");
-        String json = objectMapper.writeValueAsString(member);
+        MemberRequest memberRequest = new MemberRequest("user@naver.com", "user1234");
+        String json = objectMapper.writeValueAsString(memberRequest);
         given(memberWebPort.login(any())).willReturn(1L);
 
         // when
@@ -108,8 +108,8 @@ class MemberWebAdapterTest {
     @DisplayName("로그인 이메일 @ 벨리데이션 확인")
     void login_email_validation() throws Exception {
         // given
-        Member member = new Member("naver.com", "user1234");
-        String json = objectMapper.writeValueAsString(member);
+        MemberRequest memberRequest = new MemberRequest("naver.com", "user1234");
+        String json = objectMapper.writeValueAsString(memberRequest);
         given(memberWebPort.login(any())).willReturn(1L);
 
         // expected
@@ -125,8 +125,8 @@ class MemberWebAdapterTest {
     @DisplayName("로그인 비밀번호 8자 이상 벨리데이션 확인")
     void login_password_validation() throws Exception {
         // given
-        Member member = new Member("user@naver.com", "user123");
-        String json = objectMapper.writeValueAsString(member);
+        MemberRequest memberRequest = new MemberRequest("user@naver.com", "user123");
+        String json = objectMapper.writeValueAsString(memberRequest);
         given(memberWebPort.login(any())).willReturn(1L);
 
         // expected

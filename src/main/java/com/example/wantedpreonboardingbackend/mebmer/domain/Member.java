@@ -20,11 +20,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MEMBER_ID")
     private Long id;
-
-    @Email(regexp = ".*@.*")
     private String email;
-
-    @Length(min = 8)
     private String password;
 
     public Member(String email, String password) {

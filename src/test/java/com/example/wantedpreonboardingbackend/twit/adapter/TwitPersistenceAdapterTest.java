@@ -11,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -33,30 +32,30 @@ class TwitPersistenceAdapterTest {
     @DisplayName("게시물 전체 조회")
     void find_all_with_member() {
         // when
-        PageRequest pageRequest1 = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "id"));
+        PageRequest pageRequest1 = PageRequest.of(0, 3);
         Page<Twit> twits1 = twitPersistenceAdapter.findAllWithMember(pageRequest1);
 
-        PageRequest pageRequest2 = PageRequest.of(1, 3, Sort.by(Sort.Direction.DESC, "id"));
+        PageRequest pageRequest2 = PageRequest.of(1, 3);
         Page<Twit> twits2 = twitPersistenceAdapter.findAllWithMember(pageRequest2);
 
         // then
         List<Twit> content1 = twits1.getContent();
         assertThat(content1).hasSize(3);
-        assertThat(content1.get(0).getId()).isEqualTo(6);
-        assertThat(content1.get(0).getContent()).isEqualTo("user3 writing test f");
-        assertThat(content1.get(1).getId()).isEqualTo(5);
-        assertThat(content1.get(1).getContent()).isEqualTo("user3 writing test e");
-        assertThat(content1.get(2).getId()).isEqualTo(4);
-        assertThat(content1.get(2).getContent()).isEqualTo("user2 writing test d");
+        assertThat(content1.get(0).getId()).isEqualTo(1L);
+        assertThat(content1.get(0).getContent()).isEqualTo("user1 writing test a");
+        assertThat(content1.get(1).getId()).isEqualTo(2L);
+        assertThat(content1.get(1).getContent()).isEqualTo("user1 writing test b");
+        assertThat(content1.get(2).getId()).isEqualTo(3L);
+        assertThat(content1.get(2).getContent()).isEqualTo("user2 writing test c");
 
         List<Twit> content2 = twits2.getContent();
         assertThat(content2).hasSize(3);
-        assertThat(content2.get(0).getId()).isEqualTo(3);
-        assertThat(content2.get(0).getContent()).isEqualTo("user2 writing test c");
-        assertThat(content2.get(1).getId()).isEqualTo(2);
-        assertThat(content2.get(1).getContent()).isEqualTo("user1 writing test b");
-        assertThat(content2.get(2).getId()).isEqualTo(1);
-        assertThat(content2.get(2).getContent()).isEqualTo("user1 writing test a");
+        assertThat(content2.get(0).getId()).isEqualTo(4L);
+        assertThat(content2.get(0).getContent()).isEqualTo("user2 writing test d");
+        assertThat(content2.get(1).getId()).isEqualTo(5L);
+        assertThat(content2.get(1).getContent()).isEqualTo("user3 writing test e");
+        assertThat(content2.get(2).getId()).isEqualTo(6L);
+        assertThat(content2.get(2).getContent()).isEqualTo("user3 writing test f");
     }
 
     @Test

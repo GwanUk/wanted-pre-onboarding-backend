@@ -10,12 +10,16 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,6 +40,9 @@ class TwitWebAdapterTest {
     @Test
     @DisplayName("게시글 전체 조회")
     void findAllWithMember() throws Exception {
+        // given
+        given(twitWebPort.findAllWithMember(any())).willReturn(Page.empty());
+
         // when
         mockMvc.perform(get("/twit")
                         .accept(APPLICATION_JSON))
@@ -43,13 +50,16 @@ class TwitWebAdapterTest {
                 .andDo(print());
 
         // then
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"));
+        PageRequest pageRequest = PageRequest.of(0, 10);
         then(twitWebPort).should().findAllWithMember(pageRequest);
     }
 
     @Test
     @DisplayName("게시글 조회 by id")
     void find_by_id() throws Exception {
+        // given
+        given(twitWebPort.findByIdWithMember(any())).willReturn(Optional.empty());
+
         // when
         mockMvc.perform(get("/twit/{twitId}", "1")
                         .accept(APPLICATION_JSON))
@@ -64,8 +74,8 @@ class TwitWebAdapterTest {
     @DisplayName("게시글 생성")
     void save() throws Exception {
         // given
-        Twit twit = new Twit("test writing");
-        String json = objectMapper.writeValueAsString(twit);
+        TwitRequest twitRequest = new TwitRequest("test writing");
+        String json = objectMapper.writeValueAsString(twitRequest);
 
         // when
         mockMvc.perform(post("/twit")
@@ -85,8 +95,8 @@ class TwitWebAdapterTest {
     @DisplayName("게시글 수정")
     void update() throws Exception {
         // given
-        Twit twit = new Twit("test writing");
-        String json = objectMapper.writeValueAsString(twit);
+        TwitRequest twitRequest = new TwitRequest("test writing");
+        String json = objectMapper.writeValueAsString(twitRequest);
 
         // when
         mockMvc.perform(put("/twit/{twitId}", "1")
@@ -106,8 +116,8 @@ class TwitWebAdapterTest {
     @DisplayName("게시글 수정 jwt 토큰 헤더 없으면 예외")
     void update_non_jwt() throws Exception {
         // given
-        Twit twit = new Twit("test writing");
-        String json = objectMapper.writeValueAsString(twit);
+        TwitRequest twitRequest = new TwitRequest("test writing");
+        String json = objectMapper.writeValueAsString(twitRequest);
 
         // expected
         mockMvc.perform(put("/twit/{twitId}", "1")

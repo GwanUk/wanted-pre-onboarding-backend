@@ -2,7 +2,6 @@ package com.example.wantedpreonboardingbackend.mebmer.adapter;
 
 import com.example.wantedpreonboardingbackend.common.utils.JwtContext;
 import com.example.wantedpreonboardingbackend.mebmer.application.MemberWebPort;
-import com.example.wantedpreonboardingbackend.mebmer.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,13 +19,13 @@ class MemberWebAdapter {
     private final MemberWebPort memberWebPort;
 
     @PostMapping
-    void save(@Validated @RequestBody Member member) {
-        memberWebPort.save(member);
+    void save(@Validated @RequestBody MemberRequest memberRequest) {
+        memberWebPort.save(memberRequest.toEntity());
     }
 
     @PostMapping("/login")
-    Map<String, String> login(@Validated @RequestBody Member member) {
-        Long memberId = memberWebPort.login(member);
+    Map<String, String> login(@Validated @RequestBody MemberRequest memberRequest) {
+        Long memberId = memberWebPort.login(memberRequest.toEntity());
         String jwt = JwtContext.createJwt(memberId);
         return Map.of("Authentication", jwt);
     }
