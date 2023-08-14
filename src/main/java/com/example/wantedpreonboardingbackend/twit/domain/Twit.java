@@ -27,6 +27,9 @@ public class Twit {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    @Version
+    private Long version;
+
     public Twit(String content) {
         this.content = content;
     }
