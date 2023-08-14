@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
@@ -33,27 +34,29 @@ class TwitPersistenceAdapterTest {
     void find_all_with_member() {
         // when
         PageRequest pageRequest1 = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "id"));
-        List<Twit> twits1 = twitPersistenceAdapter.findAllWithMember(pageRequest1);
+        Page<Twit> twits1 = twitPersistenceAdapter.findAllWithMember(pageRequest1);
 
         PageRequest pageRequest2 = PageRequest.of(1, 3, Sort.by(Sort.Direction.DESC, "id"));
-        List<Twit> twits2 = twitPersistenceAdapter.findAllWithMember(pageRequest2);
+        Page<Twit> twits2 = twitPersistenceAdapter.findAllWithMember(pageRequest2);
 
         // then
-        assertThat(twits1).hasSize(3);
-        assertThat(twits1.get(0).getId()).isEqualTo(6);
-        assertThat(twits1.get(0).getContent()).isEqualTo("user3 writing test f");
-        assertThat(twits1.get(1).getId()).isEqualTo(5);
-        assertThat(twits1.get(1).getContent()).isEqualTo("user3 writing test e");
-        assertThat(twits1.get(2).getId()).isEqualTo(4);
-        assertThat(twits1.get(2).getContent()).isEqualTo("user2 writing test d");
+        List<Twit> content1 = twits1.getContent();
+        assertThat(content1).hasSize(3);
+        assertThat(content1.get(0).getId()).isEqualTo(6);
+        assertThat(content1.get(0).getContent()).isEqualTo("user3 writing test f");
+        assertThat(content1.get(1).getId()).isEqualTo(5);
+        assertThat(content1.get(1).getContent()).isEqualTo("user3 writing test e");
+        assertThat(content1.get(2).getId()).isEqualTo(4);
+        assertThat(content1.get(2).getContent()).isEqualTo("user2 writing test d");
 
-        assertThat(twits2).hasSize(3);
-        assertThat(twits2.get(0).getId()).isEqualTo(3);
-        assertThat(twits2.get(0).getContent()).isEqualTo("user2 writing test c");
-        assertThat(twits2.get(1).getId()).isEqualTo(2);
-        assertThat(twits2.get(1).getContent()).isEqualTo("user1 writing test b");
-        assertThat(twits2.get(2).getId()).isEqualTo(1);
-        assertThat(twits2.get(2).getContent()).isEqualTo("user1 writing test a");
+        List<Twit> content2 = twits2.getContent();
+        assertThat(content2).hasSize(3);
+        assertThat(content2.get(0).getId()).isEqualTo(3);
+        assertThat(content2.get(0).getContent()).isEqualTo("user2 writing test c");
+        assertThat(content2.get(1).getId()).isEqualTo(2);
+        assertThat(content2.get(1).getContent()).isEqualTo("user1 writing test b");
+        assertThat(content2.get(2).getId()).isEqualTo(1);
+        assertThat(content2.get(2).getContent()).isEqualTo("user1 writing test a");
     }
 
     @Test
@@ -61,7 +64,7 @@ class TwitPersistenceAdapterTest {
     @DisplayName("게시물 단건 조회")
     void find_member_by_id() {
         // when
-        Twit twit = twitPersistenceAdapter.findById(1L).orElseThrow(NotFoundDataException::new);
+        Twit twit = twitPersistenceAdapter.findByIdWithMember(1L).orElseThrow(NotFoundDataException::new);
 
         // then
         assertThat(twit.getId()).isEqualTo(1L);
@@ -84,13 +87,14 @@ class TwitPersistenceAdapterTest {
         twitPersistenceAdapter.save(twit);
 
         // then
-        List<Twit> twits = twitPersistenceAdapter.findAllWithMember(PageRequest.of(0, 10));
-        assertThat(twits).hasSize(7);
-        assertThat(twits.get(6).getId()).isEqualTo(7L);
-        assertThat(twits.get(6).getContent()).isEqualTo("writing test");
-        assertThat(twits.get(6).getMember().getId()).isEqualTo(1L);
-        assertThat(twits.get(6).getMember().getEmail()).isEqualTo("user1@naver.com");
-        assertThat(twits.get(6).getMember().getPassword()).isEqualTo("user1234");
+        Page<Twit> twits = twitPersistenceAdapter.findAllWithMember(PageRequest.of(0, 10));
+        List<Twit> content = twits.getContent();
+        assertThat(content).hasSize(7);
+        assertThat(content.get(6).getId()).isEqualTo(7L);
+        assertThat(content.get(6).getContent()).isEqualTo("writing test");
+        assertThat(content.get(6).getMember().getId()).isEqualTo(1L);
+        assertThat(content.get(6).getMember().getEmail()).isEqualTo("user1@naver.com");
+        assertThat(content.get(6).getMember().getPassword()).isEqualTo("user1234");
     }
 
     @Test
@@ -98,7 +102,7 @@ class TwitPersistenceAdapterTest {
     @DisplayName("게시물 삭제")
     void delete() {
         // when
-        Twit twit = twitPersistenceAdapter.findById(1L).orElseThrow(NotFoundDataException::new);
+        Twit twit = twitPersistenceAdapter.findByIdWithMember(1L).orElseThrow(NotFoundDataException::new);
         twitPersistenceAdapter.delete(twit);
 
         // then

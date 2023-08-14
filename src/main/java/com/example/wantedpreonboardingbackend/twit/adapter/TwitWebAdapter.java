@@ -4,11 +4,11 @@ import com.example.wantedpreonboardingbackend.common.annotation.Auth;
 import com.example.wantedpreonboardingbackend.twit.application.TwitWebPort;
 import com.example.wantedpreonboardingbackend.twit.domain.Twit;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -19,13 +19,13 @@ class TwitWebAdapter {
     private final TwitWebPort twitWebPort;
 
     @GetMapping
-    List<Twit> findAll(@PageableDefault(sort = "id") Pageable pageable) {
+    Page<Twit> findAllWithMember(@PageableDefault(sort = "id") Pageable pageable) {
         return twitWebPort.findAllWithMember(pageable);
     }
 
     @GetMapping("/{twitId}")
-    Optional<Twit> findById(@PathVariable Long twitId) {
-        return twitWebPort.findById(twitId);
+    Optional<Twit> findByIdWithMember(@PathVariable Long twitId) {
+        return twitWebPort.findByIdWithMember(twitId);
     }
 
     @PostMapping
