@@ -2,6 +2,7 @@ package com.example.wantedpreonboardingbackend.common.controller;
 
 import com.example.wantedpreonboardingbackend.common.exception.NotFoundDataException;
 import com.example.wantedpreonboardingbackend.common.exception.UnauthorizedException;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,9 +12,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
 
-    @ExceptionHandler
+    @ExceptionHandler({UnauthorizedException.class, ExpiredJwtException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String unauthorizedException(UnauthorizedException exception) {
+    public String unauthorizedException(RuntimeException exception) {
         return "권한이 없습니다.";
     }
 
