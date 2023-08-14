@@ -1,16 +1,15 @@
 package com.example.wantedpreonboardingbackend.twit.application;
 
 import com.example.wantedpreonboardingbackend.common.exception.NotFoundDataException;
-import com.example.wantedpreonboardingbackend.mebmer.application.MemberPersistencePort;
 import com.example.wantedpreonboardingbackend.mebmer.application.MemberWebPort;
 import com.example.wantedpreonboardingbackend.mebmer.domain.Member;
 import com.example.wantedpreonboardingbackend.twit.domain.Twit;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,14 +22,14 @@ class TwitService implements TwitWebPort{
 
     @Override
     @Transactional(readOnly = true)
-    public List<Twit> findAllWithMember(Pageable pageable) {
+    public Page<Twit> findAllWithMember(Pageable pageable) {
         return twitPersistencePort.findAllWithMember(pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Twit> findById(Long twitId) {
-        return twitPersistencePort.findById(twitId);
+    public Optional<Twit> findByIdWithMember(Long twitId) {
+        return twitPersistencePort.findByIdWithMember(twitId);
     }
 
     @Override

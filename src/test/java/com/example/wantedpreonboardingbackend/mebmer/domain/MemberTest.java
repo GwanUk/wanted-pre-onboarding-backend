@@ -1,10 +1,12 @@
 package com.example.wantedpreonboardingbackend.mebmer.domain;
 
+import com.example.wantedpreonboardingbackend.common.exception.NotFoundDataException;
 import com.example.wantedpreonboardingbackend.common.utils.PasswordEncoderUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MemberTest {
 
@@ -15,10 +17,10 @@ class MemberTest {
         Member member = new Member("user@naver.com", "user1234");
 
         // when
-        member.passwordEncoding();
+        Member encodedMember = member.passwordEncoding();
 
         // then
-        assertThat(PasswordEncoderUtil.matches("user1234", member.getPassword())).isTrue();
+        assertThat(PasswordEncoderUtil.matches("user1234", encodedMember.getPassword())).isTrue();
     }
 
     @Test
@@ -29,6 +31,18 @@ class MemberTest {
         Member findMember = new Member("user@naver.com", PasswordEncoderUtil.encode("user1234"));
 
         // expected
-        assertThat(findMember.matchPassword(member)).isTrue();
+        findMember.matchPassword(member);
+    }
+
+    @Test
+    @DisplayName("틀린 비밀번호 예외 발생")
+    void password_not_match() {
+        // given
+        Member member = new Member("user@naver.com", "user1111");
+        Member findMember = new Member("user@naver.com", PasswordEncoderUtil.encode("user1234"));
+
+        // expected
+        assertThatThrownBy(() -> findMember.matchPassword(member))
+                .isInstanceOf(NotFoundDataException.class);
     }
 }

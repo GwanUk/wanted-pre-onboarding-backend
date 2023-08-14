@@ -1,0 +1,58 @@
+= API DOCUMENTS
+
+== 1. 사용자 회원가입 엔드포인트
+=== request
+include::{snippets}/signup/http-request.adoc[]
+include::{snippets}/signup/request-fields.adoc[]
+=== response
+include::{snippets}/signup/http-response.adoc[]
+
+== 2. 사용자 로그인 엔드포인트
+=== request
+include::{snippets}/login/http-request.adoc[]
+include::{snippets}/login/request-fields.adoc[]
+=== response
+include::{snippets}/login/http-response.adoc[]
+include::{snippets}/login/response-fields.adoc[]
+
+== 3. 새로운 게시글을 생성하는 엔드포인트
+=== request
+include::{snippets}/save/http-request.adoc[]
+include::{snippets}/save/request-headers.adoc[]
+include::{snippets}/save/request-fields.adoc[]
+=== response
+include::{snippets}/save/http-response.adoc[]
+
+== 4. 게시글 목록을 조회하는 엔드포인트
+=== request
+include::{snippets}/findAll/http-request.adoc[]
+include::{snippets}/findAll/request-parameters.adoc[]
+=== response
+include::{snippets}/findAll/http-response.adoc[]
+include::{snippets}/findAll/response-fields.adoc[]
+
+== 5. 특정 게시글을 조회하는 엔드포인트
+=== request
+include::{snippets}/find/http-request.adoc[]
+include::{snippets}/find/path-parameters.adoc[]
+=== response
+include::{snippets}/find/http-response.adoc[]
+include::{snippets}/find/response-fields.adoc[]
+
+
+== 6. 특정 게시글을 수정하는 엔드포인트
+=== request
+include::{snippets}/update/http-request.adoc[]
+include::{snippets}/update/request-headers.adoc[]
+include::{snippets}/update/path-parameters.adoc[]
+include::{snippets}/update/request-fields.adoc[]
+=== response
+include::{snippets}/update/http-response.adoc[]
+
+== 7. 특정 게시글을 삭제하는 엔드포인트
+=== request
+include::{snippets}/delete/http-request.adoc[]
+include::{snippets}/delete/request-headers.adoc[]
+include::{snippets}/delete/path-parameters.adoc[]
+=== response
+include::{snippets}/delete/http-response.adoc[]
