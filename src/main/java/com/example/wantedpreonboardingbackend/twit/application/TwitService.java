@@ -1,5 +1,6 @@
 package com.example.wantedpreonboardingbackend.twit.application;
 
+import com.example.wantedpreonboardingbackend.common.annotation.Retry;
 import com.example.wantedpreonboardingbackend.common.exception.NotFoundDataException;
 import com.example.wantedpreonboardingbackend.mebmer.application.MemberWebPort;
 import com.example.wantedpreonboardingbackend.mebmer.domain.Member;
@@ -41,6 +42,7 @@ class TwitService implements TwitWebPort{
         twitPersistencePort.save(twit);
     }
 
+    @Retry
     @Override
     public void update(Long memberId, Long twitId, Twit twit) {
         Twit findTwit = twitPersistencePort.findByIdWithMember(twitId)
