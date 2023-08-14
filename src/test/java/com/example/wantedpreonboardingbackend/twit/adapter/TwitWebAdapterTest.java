@@ -113,6 +113,25 @@ class TwitWebAdapterTest {
     }
 
     @Test
+    @DisplayName("게시글 수정 jwt 토큰 만료 예외")
+    void update_jwt_expiration() throws Exception {
+        // given
+        TwitRequest twitRequest = new TwitRequest("test writing");
+        String json = objectMapper.writeValueAsString(twitRequest);
+        String jwt = JwtContext.createJwt(1L, 100);
+        Thread.sleep(200);
+
+        // expected
+        mockMvc.perform(put("/twit/{twitId}", "1")
+                        .header("Authentication", jwt)
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string("권한이 없습니다."))
+                .andDo(print());
+    }
+
+    @Test
     @DisplayName("게시글 수정 jwt 토큰 헤더 없으면 예외")
     void update_non_jwt() throws Exception {
         // given
@@ -142,15 +161,25 @@ class TwitWebAdapterTest {
     }
 
     @Test
-    @DisplayName("게시글 삭제 jwt 토큰 헤더 없으면 예외")
-    void delete_non_jwt() throws Exception {
+    @DisplayName("게시글 삭제 jwt 토큰 만료 예외")
+    void delete_jwt_expiration() throws Exception {
         // given
-        Twit twit = new Twit("test writing");
-        String json = objectMapper.writeValueAsString(twit);
+        String jwt = JwtContext.createJwt(1L, 100);
+        Thread.sleep(200);
 
         // expected
         mockMvc.perform(delete("/twit/{twitId}", "1")
-                        .content(json))
+                        .header("Authentication", jwt))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string("권한이 없습니다."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 jwt 토큰 헤더 없으면 예외")
+    void delete_non_jwt() throws Exception {
+        // expected
+        mockMvc.perform(delete("/twit/{twitId}", "1"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string("권한이 없습니다."))
                 .andDo(print());

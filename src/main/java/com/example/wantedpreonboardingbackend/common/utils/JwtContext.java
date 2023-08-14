@@ -21,12 +21,17 @@ public abstract class JwtContext {
     }
 
     public static String createJwt(Long id) {
+        return createJwt(id, 600000);
+    }
+
+    public static String createJwt(Long id, long millis) {
         Key secretKey = Keys.hmacShaKeyFor(KEY);
 
         return Jwts.builder()
                 .setSubject(String.valueOf(id))
                 .signWith(secretKey)
-                .setIssuedAt(new Date())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + millis))
                 .compact();
     }
 
