@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  database:
+    image: mysql
+    container_name: database-mysql
+    environment:
+      - MYSQL_DATABASE=wanted
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_ROOT_PASSWORD=1234
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+
+  application:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+    image: web-server-img
+    container_name: web-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/wanted?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
